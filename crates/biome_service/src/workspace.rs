@@ -57,7 +57,6 @@ use biome_analyze::ActionCategory;
 pub use biome_analyze::RuleCategories;
 use biome_configuration::PartialConfiguration;
 use biome_console::{markup, Markup, MarkupBuf};
-use biome_css_formatter::can_format_css_yet;
 use biome_diagnostics::CodeSuggestion;
 use biome_formatter::Printed;
 use biome_fs::BiomePath;
@@ -164,9 +163,7 @@ impl FileFeaturesResult {
             } else if file_source.is_json_like() {
                 !settings.formatter().enabled || settings.json_formatter_disabled()
             } else if file_source.is_css_like() {
-                !can_format_css_yet()
-                    || !settings.formatter().enabled
-                    || settings.css_formatter_disabled()
+                !settings.formatter().enabled || settings.css_formatter_disabled()
             } else {
                 !settings.formatter().enabled
             };

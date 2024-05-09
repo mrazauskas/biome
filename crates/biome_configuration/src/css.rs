@@ -17,6 +17,10 @@ pub struct CssConfiguration {
     /// Formatting options
     #[partial(type, bpaf(external(partial_css_formatter), optional))]
     pub formatter: CssFormatter,
+
+    /// Linter options
+    #[partial(type, bpaf(external(partial_css_linter), optional))]
+    pub linter: CssLinter,
 }
 
 /// Options that changes how the CSS parser behaves
@@ -75,5 +79,21 @@ impl Default for CssFormatter {
             line_width: Default::default(),
             quote_style: Default::default(),
         }
+    }
+}
+
+#[derive(Clone, Debug, Deserialize, Eq, Partial, PartialEq, Serialize)]
+#[partial(derive(Bpaf, Clone, Deserializable, Eq, Merge, PartialEq))]
+#[partial(cfg_attr(feature = "schema", derive(schemars::JsonSchema)))]
+#[partial(serde(rename_all = "camelCase", default, deny_unknown_fields))]
+pub struct CssLinter {
+    /// Control the formatter for CSS (and its super languages) files.
+    #[partial(bpaf(long("css-linter-enabled"), argument("true|false"), optional))]
+    pub enabled: bool,
+}
+
+impl Default for CssLinter {
+    fn default() -> Self {
+        Self { enabled: false }
     }
 }
